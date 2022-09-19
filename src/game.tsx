@@ -73,6 +73,7 @@ export const Game = function Grid({
                   scoreAtom={scores[i][j]}
                   colIndex={j}
                   rowIndex={i}
+                  blur={Math.min(i, rows - i - 1, j, cols - j - 1)}
                   size={cellSize}
                 />
               ))
@@ -87,12 +88,14 @@ const Cell = function Cell({
   scoreAtom,
   colIndex,
   rowIndex,
+  blur,
   size,
 }: {
   valueAtom: PrimitiveAtom<0 | 1>;
   scoreAtom: Atom<number>;
   colIndex: number;
   rowIndex: number;
+  blur: number;
   size: number;
 }) {
   const [value, setValue] = useAtom(valueAtom);
@@ -121,7 +124,12 @@ const Cell = function Cell({
       <div
         className={[
           "w-full h-full border border-white hover:border-green-400",
-          { 0: "bg-green-50", 1: "bg-green-200" }[value],
+
+          {
+            2: { 0: "bg-green-50", 1: "bg-green-200" }[value],
+            1: { 0: "bg-green-50", 1: "bg-green-100" }[value],
+            0: { 0: "bg-green-50", 1: "bg-green-50" }[value],
+          }[blur] ?? { 0: "bg-green-50", 1: "bg-green-300" }[value],
         ].join(" ")}
       />
     </div>
